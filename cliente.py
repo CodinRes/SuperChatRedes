@@ -2,7 +2,7 @@ import socket
 import threading
 import os
 
-SERVER_HOST = 'localhost'   # IP o nombre de host del servidor (localhost para pruebas)
+SERVER_HOST = '192.168.0.12'   # IP o nombre de host del servidor (localhost o 127.0.0.1 si el servidor esta en la misma maquina)
 SERVER_PORT = 5000          # Puerto en el que escucha el servidor de chat
 
 # Crear socket TCP del cliente
@@ -21,24 +21,24 @@ if not nombre_usuario:
 client_sock.send(nombre_usuario.encode('utf-8'))
 
 
-# Función que ejecutará el hilo de recepción
+# Funcion que ejecutara el hilo de recepcion
 def recibir_mensajes():
     try:
         while True:
             data = client_sock.recv(1024)
             if not data:
-                # El servidor cerró la conexión
-                print("** Conexión cerrada por el servidor **")
+                # El servidor cerrÃ³ la conexiÃ³n
+                print("** ConexiÃ³n cerrada por el servidor **")
                 break
             mensaje = data.decode('utf-8').strip()
             if mensaje:
-                print("\r" + mensaje + "\n> ", end="")  
-                # Imprime el mensaje recibido. "\r" retorna al inicio de línea.
+                print("\r" + mensaje + "\n> ", end="")
+                # Imprime el mensaje recibido. "\r" retorna al inicio de lÃ­nea.
                 # Luego muestra el prompt ">" nuevamente para el usuario.
     except Exception as e:
-        print(f"[Error] Conexión perdida: {e}")
+        print(f"[Error] ConexiÃ³n perdida: {e}")
     finally:
-        # Salir del programa cuando se pierde la conexión
+        # Salir del programa cuando se pierde la conexiÃ³n
         client_sock.close()
         print("\nSaliendo del chat...")
         os._exit(0)  # fuerza la salida de todo el proceso
@@ -48,7 +48,7 @@ hilo_receptor = threading.Thread(target=recibir_mensajes, daemon=True)
 hilo_receptor.start()
 
 
-print("¡Bienvenido al chat! Escriba sus mensajes. Comandos: /listar, /quitar")
+print("ï¿½Bienvenido al chat! Escriba sus mensajes. Comandos: /listar, /quitar")
 while True:
     try:
         mensaje = input("> ")
@@ -56,7 +56,7 @@ while True:
         # Si se presiona Ctrl+D (EOF) terminar
         mensaje = "/quitar"
     if mensaje.strip() == "":
-        continue  # ignorar líneas vacías
+        continue  # ignorar lÃ­neas vacÃ­as
     if mensaje.startswith("/quitar"):
         # Enviar comando de salir al servidor y cerrar socket
         client_sock.send(mensaje.encode('utf-8'))
